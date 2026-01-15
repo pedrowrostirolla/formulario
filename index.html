@@ -21,11 +21,21 @@
         button#submit-btn:hover { background: #2ea043; }
 
         #connection-error { display: none; text-align: center; margin-top: 50px; font-weight: bold; }
-        .final-highlight { font-size: 1.8em; display: block; margin-top: 20px; border: 2px solid #3fb950; padding: 15px; text-align: center; line-height: 1.4; }
+        
+        /* ALTERAR O QUE JÁ EXISTE: Ajuste de elegância na frase final */
+        .final-highlight { 
+            font-size: 1.2em; 
+            display: block; 
+            margin-top: 20px; 
+            border-left: 4px solid #3fb950; 
+            padding: 10px 20px; 
+            background: rgba(63, 185, 80, 0.1);
+            line-height: 1.5;
+        }
 
         /* Área de Decisão Final */
         #decision-area { display: none; text-align: center; margin-top: 30px; padding-bottom: 100px; }
-        .btn-decision { padding: 15px 30px; font-family: inherit; font-weight: bold; cursor: pointer; border-radius: 5px; border: none; margin: 10px; font-size: 1.2em; }
+        .btn-decision { padding: 15px 30px; font-family: inherit; font-weight: bold; cursor: pointer; border-radius: 5px; border: none; margin: 10px; font-size: 1.1em; }
         #btn-sim { background-color: #3fb950; color: #0d1117; }
         #btn-nao { background-color: #f85149; color: white; position: absolute; transition: all 0.2s ease; }
     </style>
@@ -66,7 +76,7 @@
         <span class="cursor" id="main-cursor"></span>
         
         <div id="decision-area">
-            <p style="font-size: 1.3em;">Você aceita minha mudança para Santos?</p>
+            <p style="font-size: 1.2em; color: #3fb950;">Deseja confirmar a recepção deste novo integrante em Santos/SP?</p>
             <button id="btn-sim" class="btn-decision" onclick="finalAceite()">Sim, aceito!</button>
             <button id="btn-nao" class="btn-decision" onmouseover="fugir()">Não aceito.</button>
         </div>
@@ -91,7 +101,7 @@
             "> [SISTEMA]: A distância não é mais um requisito de hardware.",
             "> [SISTEMA]: Deletando 'Saudade.exe' de ambos os diretórios...",
             "> [SISTEMA]: Sincronização de vida completa. Prepare o nosso café.",
-            "> <span class='final-highlight'>Nossos pedidos foram ouvidos e nossos sonhos passarão a ser realizados: Eu estou indo para Santos para morarmos juntos! ❤️</span>"
+            "> <span class='final-highlight'>> Nossos pedidos foram ouvidos e nossos sonhos passarão a ser realizados: Eu estou me mudando para Santos para finalmente morarmos juntos! ❤️</span>"
         ];
 
         let i = 0;
@@ -120,7 +130,6 @@
                 div.style.display = "block";
                 i++;
 
-                // Delays aumentados conforme solicitado
                 let delay = 3500; 
                 if (i >= 7 && i <= 9) delay = 4500; 
                 if (i > 13) delay = 5500; 
@@ -128,24 +137,24 @@
 
                 setTimeout(type, delay);
             } else {
-                // Aparece os botões com delay após a última mensagem
                 setTimeout(() => {
                     document.getElementById("decision-area").style.display = "block";
-                    window.scrollTo(0, document.body.scrollHeight);
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
                 }, 3000);
             }
         }
 
         function fugir() {
             const btnNao = document.getElementById("btn-nao");
-            const x = Math.random() * (window.innerWidth - btnNao.offsetWidth);
-            const y = Math.random() * (window.innerHeight - btnNao.offsetHeight);
+            // Garante que o botão não saia totalmente da área visível
+            const x = Math.random() * (window.innerWidth - btnNao.offsetWidth - 50);
+            const y = Math.random() * (window.innerHeight - btnNao.offsetHeight - 50);
             btnNao.style.left = x + "px";
             btnNao.style.top = y + "px";
         }
 
         function finalAceite() {
-            alert("Sincronização confirmada! Vejo você em breve em Santos. ❤️");
+            alert("Sincronização Vitalícia Confirmada. Vejo você em breve em Santos! ❤️");
         }
     </script>
 </body>
