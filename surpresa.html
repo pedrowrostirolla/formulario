@@ -1,0 +1,135 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2513
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 AppleColorEmoji;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 <!DOCTYPE html>\
+<html>\
+<head>\
+    <title>Terminal - System Status</title>\
+    <style>\
+        /* DESIGN FIXO E IMUT\'c1VEL */\
+        body \{ background-color: #0d1117; color: #58a6ff; font-family: 'Courier New', monospace; padding: 20px; \}\
+        .cmd \{ margin-bottom: 10px; display: none; \}\
+        .cursor \{ display: inline-block; width: 10px; height: 20px; background: #58a6ff; animation: blink 1s infinite; \}\
+        .success \{ color: #3fb950; font-weight: bold; \}\
+        .error \{ color: #f85149; \}\
+        @keyframes blink \{ 0%, 100% \{ opacity: 1; \} 50% \{ opacity: 0; \} \}\
+\
+        /* Estilos do Formul\'e1rio Inicial */\
+        #form-container \{ max-width: 500px; margin: 50px auto; border: 1px solid #58a6ff; padding: 20px; border-radius: 8px; \}\
+        .form-title \{ color: #3fb950; margin-bottom: 20px; text-align: center; font-weight: bold; \}\
+        .question \{ margin-bottom: 15px; \}\
+        label \{ display: block; margin-bottom: 5px; font-size: 14px; \}\
+        input[type="text"], select \{ width: 100%; background: #161b22; border: 1px solid #30363d; color: #58a6ff; padding: 8px; font-family: inherit; box-sizing: border-box; \}\
+        button#submit-btn \{ width: 100%; background: #238636; color: white; border: none; padding: 12px; margin-top: 20px; cursor: pointer; font-family: inherit; font-weight: bold; border-radius: 6px; \}\
+        button#submit-btn:hover \{ background: #2ea043; \}\
+    </style>\
+</head>\
+<body>\
+\
+    <div id="form-container">\
+        <div class="form-title">SISTEMA DE SINCRONIZA\'c7\'c3O DE AMBIENTES v2.0</div>\
+        \
+        <div class="question">\
+            <label>1. Qual o n\'edvel atual de saudade detectado?</label>\
+            <select id="q1">\
+                <option value="alto">Alto (Cr\'edtico)</option>\
+                <option value="extremo">Extremo (Overflow)</option>\
+                <option value="infinito">Infinito (Stack Error)</option>\
+            </select>\
+        </div>\
+\
+        <div class="question">\
+            <label>2. Onde voc\'ea gostaria que o servidor principal estivesse?</label>\
+            <input type="text" id="q2" placeholder="Digite o local desejado...">\
+        </div>\
+\
+        <div class="question">\
+            <label>3. Confirmar migra\'e7\'e3o de dados sentimentais para o mesmo IP?</label>\
+            <select id="q3">\
+                <option value="sim">Sim, imediatamente</option>\
+                <option value="com_certeza">Com certeza</option>\
+            </select>\
+        </div>\
+\
+        <div class="question">\
+            <label>4. Qual a maior dificuldade do setup atual (Longa Dist\'e2ncia)?</label>\
+            <input type="text" id="q4" placeholder="Ex: Lat\'eancia f\'edsica...">\
+        </div>\
+\
+        <div class="question">\
+            <label>5. Deseja deletar a dist\'e2ncia permanentemente?</label>\
+            <select id="q5">\
+                <option value="true">True (Verdadeiro)</option>\
+            </select>\
+        </div>\
+\
+        <button id="submit-btn" onclick="startTerminal()">SUBMETER DIAGN\'d3STICO</button>\
+    </div>\
+\
+    <div id="terminal-interface" style="display: none;">\
+        <div id="terminal"></div>\
+        <span class="cursor" id="main-cursor"></span>\
+    </div>\
+\
+    <script>\
+        const lines = [\
+            "> Recebendo formul\'e1rio de diagn\'f3stico...",\
+            "> Analisando par\'e2metros de entrada...",\
+            "> Iniciando conex\'e3o remota...",\
+            "> Status: Localizado em Rio do Sul/SC",\
+            "> Alvo: Localizado em Santos/SP",\
+            "> Sincronizando bancos de dados de rotina...",\
+            "> [ERROR] Lat\'eancia muito alta detectada.",\
+            "> [ERROR] Dist\'e2ncia f\'edsica excedendo o limite permitido pelo protocolo 'AMOR-2.0'.",\
+            "> Tentando solu\'e7\'e3o alternativa baseada nas respostas do formul\'e1rio...",\
+            "> Executando: git checkout -b morar_juntos",\
+            "> Movendo pacotes de: Rio do Sul/SC -> Santos/SP",\
+            "> Atualizando endere\'e7o residencial no sistema...",\
+            "> PROCESSO CONCLU\'cdDO COM SUCESSO!",\
+            "> [SISTEMA]: A dist\'e2ncia n\'e3o \'e9 mais um requisito de hardware.",\
+            "> [SISTEMA]: Deletando 'Saudade.exe' de ambos os diret\'f3rios...",\
+            "> [SISTEMA]: Sincroniza\'e7\'e3o de vida completa. Prepare o nosso caf\'e9.",\
+            "> DEPLOY FINAL: EU ESTOU INDO MORAR COM VOC\'ca! 
+\f1 \uc0\u10084 \u65039 
+\f0 "\
+        ];\
+\
+        let i = 0;\
+\
+        function startTerminal() \{\
+            // Esconde o formul\'e1rio e mostra o terminal\
+            document.getElementById("form-container").style.display = "none";\
+            document.getElementById("terminal-interface").style.display = "block";\
+            type();\
+        \}\
+\
+        function type() \{\
+            if (i < lines.length) \{\
+                let div = document.createElement("div");\
+                div.className = "cmd";\
+                \
+                // Mantendo integridade das classes CSS\
+                if (lines[i].includes("ERROR")) div.className += " error";\
+                if (lines[i].includes("SUCESSO") || lines[i].includes("FINAL") || lines[i].includes("SISTEMA")) div.className += " success";\
+                \
+                div.innerHTML = lines[i];\
+                document.getElementById("terminal").appendChild(div);\
+                div.style.display = "block";\
+                i++;\
+\
+                // Delays para suspense\
+                let delay = 2500; \
+                if (i >= 6 && i <= 8) delay = 3500; \
+                if (i > 12) delay = 4500; \
+                if (i === lines.length - 1) delay = 6000;\
+\
+                setTimeout(type, delay);\
+            \}\
+        \}\
+    </script>\
+</body>\
+</html>}
