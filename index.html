@@ -16,51 +16,60 @@
         .form-title { color: #3fb950; margin-bottom: 20px; text-align: center; font-weight: bold; }
         .question { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; font-size: 14px; }
-        input[type="text"], select { width: 100%; background: #161b22; border: 1px solid #30363d; color: #58a6ff; padding: 8px; font-family: inherit; box-sizing: border-box; }
+        input[type="text"], input[type="email"], select { width: 100%; background: #161b22; border: 1px solid #30363d; color: #58a6ff; padding: 8px; font-family: inherit; box-sizing: border-box; }
         button#submit-btn { width: 100%; background: #238636; color: white; border: none; padding: 12px; margin-top: 20px; cursor: pointer; font-family: inherit; font-weight: bold; border-radius: 6px; }
         button#submit-btn:hover { background: #2ea043; }
+
+        /* Elemento de Erro e Ênfase Final */
+        #connection-error { display: none; text-align: center; margin-top: 50px; font-weight: bold; }
+        .final-highlight { font-size: 2em; display: block; margin-top: 20px; border: 2px solid #3fb950; padding: 15px; text-align: center; }
     </style>
 </head>
 <body>
 
     <div id="form-container">
-        <div class="form-title">SISTEMA DE SINCRONIZAÇÃO DE AMBIENTES v2.0</div>
+        <div class="form-title">CADASTRO DE NOVO USUÁRIO - VPN GATEWAY</div>
         
         <div class="question">
-            <label>1. Qual o nível atual de saudade detectado?</label>
-            <select id="q1">
-                <option value="alto">Alto (Crítico)</option>
-                <option value="extremo">Extremo (Overflow)</option>
-                <option value="infinito">Infinito (Stack Error)</option>
-            </select>
+            <label>Nome Completo:</label>
+            <input type="text" id="q1" placeholder="Ex: Nome Sobrenome">
         </div>
 
         <div class="question">
-            <label>2. Onde você gostaria que o servidor principal estivesse?</label>
-            <input type="text" id="q2" placeholder="Digite o local desejado...">
+            <label>E-mail Corporativo:</label>
+            <input type="email" id="q2" placeholder="usuario@empresa.com.br">
         </div>
 
         <div class="question">
-            <label>3. Confirmar migração de dados sentimentais para o mesmo IP?</label>
+            <label>Departamento:</label>
             <select id="q3">
-                <option value="sim">Sim, imediatamente</option>
-                <option value="com_certeza">Com certeza</option>
+                <option value="ti">Tecnologia da Informação</option>
+                <option value="rh">Recursos Humanos</option>
+                <option value="adm">Administrativo</option>
+                <option value="outros">Outros</option>
             </select>
         </div>
 
         <div class="question">
-            <label>4. Qual a maior dificuldade do setup atual (Longa Distância)?</label>
-            <input type="text" id="q4" placeholder="Ex: Latência física...">
-        </div>
-
-        <div class="question">
-            <label>5. Deseja deletar a distância permanentemente?</label>
-            <select id="q5">
-                <option value="true">True (Verdadeiro)</option>
+            <label>Nível de Acesso solicitado:</label>
+            <select id="q4">
+                <option value="leitura">Somente Leitura</option>
+                <option value="admin">Administrador Global</option>
             </select>
         </div>
 
-        <button id="submit-btn" onclick="startTerminal()">SUBMETER DIAGNÓSTICO</button>
+        <div class="question">
+            <label>Justificativa de acesso:</label>
+            <input type="text" id="q5" placeholder="Motivo da solicitação...">
+        </div>
+
+        <button id="submit-btn" onclick="triggerSystem()">SUBMETER CADASTRO</button>
+    </div>
+
+    <div id="connection-error" class="error">
+        [SISTEMA CONGELADO] <br><br>
+        ERRO CRÍTICO: FALHA NA COMUNICAÇÃO COM O GATEWAY PRINCIPAL. <br>
+        TENTANDO RECONEXÃO COM O SERVIDOR CENTRAL EM 3... 2... 1...
     </div>
 
     <div id="terminal-interface" style="display: none;">
@@ -70,9 +79,10 @@
 
     <script>
         const lines = [
+            "> Estabelecendo túnel SSH com Rio do Sul/SC...",
+            "> Conexão forçada estabelecida com sucesso.",
             "> Recebendo formulário de diagnóstico...",
             "> Analisando parâmetros de entrada...",
-            "> Iniciando conexão remota...",
             "> Status: Localizado em Rio do Sul/SC",
             "> Alvo: Localizado em Santos/SP",
             "> Sincronizando bancos de dados de rotina...",
@@ -86,14 +96,22 @@
             "> [SISTEMA]: A distância não é mais um requisito de hardware.",
             "> [SISTEMA]: Deletando 'Saudade.exe' de ambos os diretórios...",
             "> [SISTEMA]: Sincronização de vida completa. Prepare o nosso café.",
-            "> DEPLOY FINAL: EU ESTOU INDO MORAR COM VOCÊ! ❤️"
+            "> <span class='final-highlight'>DEPLOY FINAL: EU ESTOU INDO MORAR COM VOCÊ! ❤️</span>"
         ];
 
         let i = 0;
 
-        function startTerminal() {
-            // Esconde o formulário e mostra o terminal
+        function triggerSystem() {
+            // Fase 1: Congelamento e Erro
             document.getElementById("form-container").style.display = "none";
+            document.getElementById("connection-error").style.display = "block";
+            
+            // Fase 2: Após 5 segundos de "erro", inicia o terminal
+            setTimeout(startTerminal, 5000);
+        }
+
+        function startTerminal() {
+            document.getElementById("connection-error").style.display = "none";
             document.getElementById("terminal-interface").style.display = "block";
             type();
         }
@@ -114,8 +132,8 @@
 
                 // Delays para suspense
                 let delay = 2500; 
-                if (i >= 6 && i <= 8) delay = 3500; 
-                if (i > 12) delay = 4500; 
+                if (i >= 7 && i <= 9) delay = 3500; 
+                if (i > 13) delay = 4500; 
                 if (i === lines.length - 1) delay = 6000;
 
                 setTimeout(type, delay);
