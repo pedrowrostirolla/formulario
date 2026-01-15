@@ -4,7 +4,7 @@
     <title>Terminal - System Status</title>
     <style>
         /* DESIGN FIXO E IMUTÁVEL */
-        body { background-color: #0d1117; color: #58a6ff; font-family: 'Courier New', monospace; padding: 20px; }
+        body { background-color: #0d1117; color: #58a6ff; font-family: 'Courier New', monospace; padding: 20px; overflow-x: hidden; }
         .cmd { margin-bottom: 10px; display: none; }
         .cursor { display: inline-block; width: 10px; height: 20px; background: #58a6ff; animation: blink 1s infinite; }
         .success { color: #3fb950; font-weight: bold; }
@@ -20,36 +20,30 @@
         button#submit-btn { width: 100%; background: #238636; color: white; border: none; padding: 12px; margin-top: 20px; cursor: pointer; font-family: inherit; font-weight: bold; border-radius: 6px; }
         button#submit-btn:hover { background: #2ea043; }
 
-        /* Elemento de Erro e Ênfase Final */
         #connection-error { display: none; text-align: center; margin-top: 50px; font-weight: bold; }
-        .final-highlight { font-size: 2em; display: block; margin-top: 20px; border: 2px solid #3fb950; padding: 15px; text-align: center; }
+        .final-highlight { font-size: 1.8em; display: block; margin-top: 20px; border: 2px solid #3fb950; padding: 15px; text-align: center; line-height: 1.4; }
+
+        /* Área de Decisão Final */
+        #decision-area { display: none; text-align: center; margin-top: 30px; padding-bottom: 100px; }
+        .btn-decision { padding: 15px 30px; font-family: inherit; font-weight: bold; cursor: pointer; border-radius: 5px; border: none; margin: 10px; font-size: 1.2em; }
+        #btn-sim { background-color: #3fb950; color: #0d1117; }
+        #btn-nao { background-color: #f85149; color: white; position: absolute; transition: all 0.2s ease; }
     </style>
 </head>
 <body>
 
     <div id="form-container">
         <div class="form-title">CADASTRO DE NOVO USUÁRIO - VPN GATEWAY</div>
-        
-        <div class="question">
-            <label>Nome Completo:</label>
-            <input type="text" id="q1" placeholder="Ex: Nome Sobrenome">
-        </div>
-
-        <div class="question">
-            <label>E-mail Corporativo:</label>
-            <input type="email" id="q2" placeholder="usuario@empresa.com.br">
-        </div>
-
+        <div class="question"><label>Nome Completo:</label><input type="text" id="q1" placeholder="Ex: Nome Sobrenome"></div>
+        <div class="question"><label>E-mail Corporativo:</label><input type="email" id="q2" placeholder="usuario@empresa.com.br"></div>
         <div class="question">
             <label>Departamento:</label>
             <select id="q3">
                 <option value="ti">Tecnologia da Informação</option>
                 <option value="rh">Recursos Humanos</option>
                 <option value="adm">Administrativo</option>
-                <option value="outros">Outros</option>
             </select>
         </div>
-
         <div class="question">
             <label>Nível de Acesso solicitado:</label>
             <select id="q4">
@@ -57,12 +51,7 @@
                 <option value="admin">Administrador Global</option>
             </select>
         </div>
-
-        <div class="question">
-            <label>Justificativa de acesso:</label>
-            <input type="text" id="q5" placeholder="Motivo da solicitação...">
-        </div>
-
+        <div class="question"><label>Justificativa de acesso:</label><input type="text" id="q5" placeholder="Motivo da solicitação..."></div>
         <button id="submit-btn" onclick="triggerSystem()">SUBMETER CADASTRO</button>
     </div>
 
@@ -75,6 +64,12 @@
     <div id="terminal-interface" style="display: none;">
         <div id="terminal"></div>
         <span class="cursor" id="main-cursor"></span>
+        
+        <div id="decision-area">
+            <p style="font-size: 1.3em;">Você aceita minha mudança para Santos?</p>
+            <button id="btn-sim" class="btn-decision" onclick="finalAceite()">Sim, aceito!</button>
+            <button id="btn-nao" class="btn-decision" onmouseover="fugir()">Não aceito.</button>
+        </div>
     </div>
 
     <script>
@@ -96,17 +91,14 @@
             "> [SISTEMA]: A distância não é mais um requisito de hardware.",
             "> [SISTEMA]: Deletando 'Saudade.exe' de ambos os diretórios...",
             "> [SISTEMA]: Sincronização de vida completa. Prepare o nosso café.",
-            "> <span class='final-highlight'>DEPLOY FINAL: EU ESTOU INDO MORAR COM VOCÊ! ❤️</span>"
+            "> <span class='final-highlight'>Nossos pedidos foram ouvidos e nossos sonhos passarão a ser realizados: Eu estou indo para Santos para morarmos juntos! ❤️</span>"
         ];
 
         let i = 0;
 
         function triggerSystem() {
-            // Fase 1: Congelamento e Erro
             document.getElementById("form-container").style.display = "none";
             document.getElementById("connection-error").style.display = "block";
-            
-            // Fase 2: Após 5 segundos de "erro", inicia o terminal
             setTimeout(startTerminal, 5000);
         }
 
@@ -120,24 +112,40 @@
             if (i < lines.length) {
                 let div = document.createElement("div");
                 div.className = "cmd";
-                
-                // Mantendo integridade das classes CSS
                 if (lines[i].includes("ERROR")) div.className += " error";
-                if (lines[i].includes("SUCESSO") || lines[i].includes("FINAL") || lines[i].includes("SISTEMA")) div.className += " success";
+                if (lines[i].includes("SUCESSO") || lines[i].includes("FINAL") || lines[i].includes("SISTEMA") || lines[i].includes("final-highlight")) div.className += " success";
                 
                 div.innerHTML = lines[i];
                 document.getElementById("terminal").appendChild(div);
                 div.style.display = "block";
                 i++;
 
-                // Delays para suspense
-                let delay = 2500; 
-                if (i >= 7 && i <= 9) delay = 3500; 
-                if (i > 13) delay = 4500; 
-                if (i === lines.length - 1) delay = 6000;
+                // Delays aumentados conforme solicitado
+                let delay = 3500; 
+                if (i >= 7 && i <= 9) delay = 4500; 
+                if (i > 13) delay = 5500; 
+                if (i === lines.length - 1) delay = 7000;
 
                 setTimeout(type, delay);
+            } else {
+                // Aparece os botões com delay após a última mensagem
+                setTimeout(() => {
+                    document.getElementById("decision-area").style.display = "block";
+                    window.scrollTo(0, document.body.scrollHeight);
+                }, 3000);
             }
+        }
+
+        function fugir() {
+            const btnNao = document.getElementById("btn-nao");
+            const x = Math.random() * (window.innerWidth - btnNao.offsetWidth);
+            const y = Math.random() * (window.innerHeight - btnNao.offsetHeight);
+            btnNao.style.left = x + "px";
+            btnNao.style.top = y + "px";
+        }
+
+        function finalAceite() {
+            alert("Sincronização confirmada! Vejo você em breve em Santos. ❤️");
         }
     </script>
 </body>
